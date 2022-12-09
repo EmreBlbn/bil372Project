@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{% block title %} Hastalar {% endblock %}</h1>
+    <table>
+        <tr>
+          <th>TC No</th>
+          <th>Tel No</th>
+          <th>Adres</th>
+          <th>İsim Soyisim</th>
+        </tr>
+        {% for book in books %}
+            <tr>
+                <td>{{ book[0] }}</td>
+                <td>{{ book[1] }}</td>
+                <td>{{ book[2] }}</td>
+                <td>{{ book[3] }} {{ book[4] }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
