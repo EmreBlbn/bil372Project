@@ -18,4 +18,21 @@
             </tr>
         {% endfor %}
     </table>
+    <h1>Doktorlar</h1>
+    <table>
+        <tr>
+          <th>TC No</th>        
+          <th>İsim Soyisim</th>
+          <th>Tel No</th>
+          <th>Cinsiyet</th>
+        </tr>
+        {% for book2 in books2 %}
+            <tr>
+                <td>{{ book2[0] }}</td>
+                <td>{{ book2[1] }} {{ book2[2] }}</td>
+                <td>{{ book2[3] }}</td>
+                <td>{{ book2[4] }}</td>
+            </tr>
+        {% endfor %}
+    </table>
 {% endblock %}
