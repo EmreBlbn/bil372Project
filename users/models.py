@@ -52,31 +52,28 @@ class User(db.Model, UserMixin):
         pass
 
 
-# class Admin(User):
-#     __tablename__ = 'admin'
-#     user_id = db.Column(
-#         db.Integer,
-#         db.ForeignKey('user.user_id'),
-#         primary_key=True)
-#
-#     __mapper_args__ = {
-#         "polymorphic_identity": "admin",
-#     }
-#
-#     def __repr__(self):
-#         return super().__repr__()
-#
-#     @classmethod
-#     def create_user(cls, username, password):
-#         super().create_user(username, password)
-#
-#     def user_dashboard(self):
-#         return redirect('/admin')
+class Admin(User):
+    __tablename__ = 'admin'
+    user_id = db.Column(db.Integer, db.ForeignKey('appuser.user_id'), primary_key=True)
+
+    __mapper_args__ = {
+        "polymorphic_identity": "admin",
+    }
+
+    def __repr__(self):
+        return super().__repr__()
+
+    @classmethod
+    def create_user(cls, username, password):
+        super().create_user(username, password)
+
+    def user_dashboard(self):
+        return redirect('/admin')
 
 
 class Doctor(User):
     __tablename__ = 'doctor'
-    doctor_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
+    doctor_id = db.Column(db.Integer, db.ForeignKey('appuser.user_id'))
     doctor_tc = db.Column(db.String(11), primary_key=True)
     doctor_name = db.Column(db.String(15), nullable=False)
     last_name = db.Column(db.String(15), nullable=False)
@@ -96,7 +93,7 @@ class Doctor(User):
         return render_template("doctor_dashboard.html", user=self)
 
     __mapper_args__ = {
-        "polymorphic_identity": "doctor"
+        "polymorphic_identity": "doctor",
     }
 
     def __repr__(self):
@@ -112,7 +109,7 @@ class Doctor(User):
 
 class Patient(User):
     __tablename__ = 'patient'
-    p_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
+    p_id = db.Column(db.Integer, db.ForeignKey('appuser.user_id'))
     p_tc = db.Column(db.String(11), primary_key=True)
     p_name = db.Column(db.String(11), nullable=False)
     p_last_name = db.Column(db.String(11), nullable=False)
@@ -140,7 +137,7 @@ class Patient(User):
 
 class Polyclinic(User):
     __tablename__ = 'polyclinic'
-    pol_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
+    pol_id = db.Column(db.Integer, db.ForeignKey('appuser.user_id'))
     pol_name = db.Column(db.String(25), nullable=False, primary_key=True)
     pol_no = db.Column(db.String(1), nullable=False, primary_key=True)
     pol_location = db.Column(db.String(50), nullable=False)
@@ -165,7 +162,7 @@ class Polyclinic(User):
 
 class Laboratory(User):
     __tablename__ = 'laboratory'
-    # lab_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
+    # lab_id = db.Column(db.Integer, db.ForeignKey('appuser.user_id'))
     # doc_tc = db.Column(db.String(11), nullable=False, db.ForeignKey('doctor.doctor_id'))
     # pat_tc = db.Column(db.String(11), nullable=False, db.ForeignKey('doctor.doctor_id'))
     # test_no = db.Column(db.String(10), nullable=False, primary_key=True)
