@@ -1,72 +1,86 @@
-CREATE TABLE HASTA 
+CREATE TABLE APPUSER
 (
-	H_tc char(11) primary key,
-	H_telefon char(11) NOT NULL,
-	H_adres VARCHAR(50),
-	H_ad VARCHAR(25),
-	H_soyad VARCHAR(25)
+	user_id integer UNIQUE,
+	username varchar(15) UNIQUE,
+	user_password VARCHAR(15) NOT NULL,
+	user_type VARCHAR(10) NOT NULL,
+	Primary key (user_id)
+
 );
 
-CREATE TABLE AKRABA
+CREATE TABLE POLYCLINIC
 (
-	A_ad varchar(15) unique,
-	A_soyad varchar(15) unique,
-	A_tc char(11) not null,
-	A_dtarih date,
-	A_yakinlik varchar(15) not null,
-	Primary key (A_ad, A_soyad),
-	Foreign key (A_tc) References HASTA (H_tc)
+	pol_id integer UNIQUE,
+	pol_name varchar(25) unique,
+	pol_no char(1) unique,
+	pol_location varchar(50) NOT NULL,
+	Primary key(pol_name, pol_no),
+	Foreign key(pol_id) REFERENCES APPUSER (user_id)
 );
 
-CREATE TABLE POLIKLINIK
+CREATE TABLE DOCTOR
 (
-	Pol_isim varchar(25) unique,
-	Pol_no char(2) unique,
-	Pol_konum varchar(50) NOT NULL,
-	Primary key(Pol_isim, Pol_no)
+	doctor_id integer UNIQUE,
+	doctor_tc char(11) primary key,
+	doctor_name varchar(15) NOT NULL,
+	last_name varchar(15) NOT NULL,
+	phone char(11) NOT NULL,
+	gender char NOT NULL,
+	bdate DATE,
+	major varchar(25) NOT NULL,
+	supervisor_tc char(11),
+	Foreign key(major) REFERENCES POLYCLINIC (pol_name),
+	Foreign key(supervisor_tc) REFERENCES DOCTOR (doctor_tc),
+	Foreign key(doctor_id) REFERENCES APPUSER (user_id)
 );
 
-CREATE TABLE DOKTOR
+CREATE TABLE PATIENT
 (
-	Tc_no char(11) primary key,
-	Ad varchar(15) NOT NULL,
-	Soyad varchar(15) NOT NULL,
-	Telefon char(11) NOT NULL,
-	Cinsiyet char NOT NULL,
-	Dtarih DATE,
-	Brans varchar(25) NOT NULL,
-	P_isim VARCHAR(25),
-	Bas_tc char(11),
-	Foreign key(P_isim) REFERENCES POLIKLINIK (Pol_isim),
-	Foreign key(Bas_tc) REFERENCES DOKTOR (Tc_no)
+	p_id integer UNIQUE,
+	p_tc char(11) primary key,
+	p_name char(11) NOT NULL,
+	p_last_name char(11) NOT NULL,
+	p_phone VARCHAR(11),
+	p_address VARCHAR(50),
+	p_bdate DATE,
+	Foreign key(p_id) REFERENCES APPUSER (user_id)
 );
 
-CREATE TABLE LABORATUVAR
+CREATE TABLE LABORATORY
 (
-	Ornek_no varchar(2) primary key,
-	Hasta_tc char(11) ,
-	Doktor_tc char(11) ,
-	Foreign key(Hasta_tc) REFERENCES HASTA (H_tc),
-	Foreign key(Doktor_tc) REFERENCES DOKTOR (Tc_no)
+	lab_id integer UNIQUE,
+	doc_tc char(11),
+	pat_tc char(11),
+	test_no char(11) UNIQUE,
+	Primary key(test_no),
+	Foreign key(lab_id) REFERENCES APPUSER (user_id),
+	Foreign key(pat_tc) REFERENCES PATIENT (p_tc),
+	Foreign key(doc_tc) REFERENCES DOCTOR (doctor_tc)
 );
 
-CREATE TABLE MUAYENE_EDER
+CREATE TABLE EXAMINES
 (
-	D_tc char(11) unique,
-	P_no char(2) unique,
-	M_sure char(2) NOT NULL,
-	Primary key(D_tc, P_no),
-	Foreign key(D_tc) REFERENCES DOKTOR (Tc_no),
-	Foreign key(P_no) REFERENCES POLIKLINIK (Pol_no)
+	d_tc char(11) unique,
+	pa_tc char(11) unique,
+	duration char(2) NOT NULL,
+	Primary key(d_tc, pa_tc),
+	Foreign key(d_tc) REFERENCES DOCTOR (doctor_tc),
+	Foreign key(pa_tc) REFERENCES PATIENT (p_tc)
 );
 
-insert into POLIKLINIK values ('Ortopedi','1','KAT1A');
-insert into doktor values ('12345678901','Ahmet','Kaplan','05305305300','E','01/01/1970','Genel Cerrahi','Ortopedi');
-insert into hasta values ('99999999999','05999999999','Gaziosmanpasa/Ankara','Asli','Celik');
-insert into akraba values ('Mehmet','Celik','99999999999','02/02/1970','BABA');
-insert into laboratuvar values ('1','99999999999','12345678901');
-insert into muayene_eder values ('12345678901','1','15');
-insert into doktor values ('12345678999','Caner','Sarı','05305301212','E','11/01/1980','Ortopedi','Ortopedi','12345678901');
+insert into APPUSER values (1,'poly1','polypoly1','polyclinic');
+insert into APPUSER values (2,'poly2','poly2poly','polyclinic');
+insert into APPUSER values (3,'doc1','thebest.*','doctor');
+insert into APPUSER values (4,'pat1','pfff12','patient');
+-- insert into APPUSER values (5,'lab1','labulabu','laboratory');
+insert into APPUSER values (6,'doc2','theworst.P','doctor');
+insert into APPUSER values (7,'pat2','pfff12','patient');
 
-
-insert into hasta values ('99999999123','0592999999','Gaziosmanpasa/Ankara','Dayı','Kürek');
+insert into POLYCLINIC values (1,'Genel Cerrahi','1','136');
+insert into POLYCLINIC values (2,'Uroloji','2','134/B');
+insert into doctor values (3,'12345678901','Osman','Abul','05305305300','E','01/01/1990','Genel Cerrahi','12345678901');
+insert into patient values (4,'99999999999','Asli','Celik','05999999999','Gaziosmanpasa/Ankara','01/01/1985');
+-- insert into laboratory values (5,'1','99999999999','12345678901');
+insert into examines values ('12345678901','99999999999','15');
+insert into doctor values (6,'12345678999','Oguz','Ergin','05305301212','E','11/01/1970','Uroloji','12345678901');
+insert into patient values (7,'99999999123','Beyza','Kurek','0592999999','Mamak/Ankara',null);

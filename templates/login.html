@@ -1,0 +1,33 @@
+<html lang="en" dir="ltr">
+<!DOCTYPE html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/master.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/login_style.css') }}">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="{{ url_for('static',filename='js/login.js') }}"></script>
+        <title>Randevu Takip Sistemi</title>
+    </head>
+    <body>
+        <div class="login_window">
+            <h2>Randevu Takip Sistemi</h2>
+            <form method="POST">
+                {{ form.hidden_tag() }}
+
+                {{ form.username.label }}<br>
+                {{ form.username }}<br><br>
+                {{ form.password.label }}<br>
+                {{ form.password }}<br><br>
+                {{ form.submit_button(class_="submit_button") }}
+                <br/>
+                {%  with messages=get_flashed_messages() %}
+                    {% if messages %}
+                        {% for message in messages %}
+                            {{ message }}
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </form>
+        </div>
+    </body>
+</html>

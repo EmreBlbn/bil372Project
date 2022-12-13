@@ -1,0 +1,55 @@
+{% extends 'layout.html' %}
+{% block page_content %}
+
+    <div style="display: flex; justify-content: flex-start;">
+        <div class="new_patient_wrapper">
+            <div>
+                <form method="POST" class="wrap_form_zone" >
+                    <div class="form_zone" id="patient-form-wrapper">
+
+                        {{ treatment_creation_form.hidden_tag() }}
+                        <p>Tedavi bilgilerini girin.</p>
+
+                        <div class="form_zone" id="treatment-form-wrapper">
+                             <div class="form">
+                                 {{ treatment_creation_form.diagnosis.label }}<br>
+                                 {{ treatment_creation_form.diagnosis(class_="form_textbox") }}
+                             </div>
+                             <div class="form">
+                                 {{ treatment_creation_form.treatment.label }}<br>
+                                 {{ treatment_creation_form.treatment(class_="form_textbox") }}
+                             </div>
+                            {{ treatment_creation_form.submit_button(class_="submit_button") }}
+                        </div>
+
+                    </div>
+                    <br><br>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="message">
+    {%  with messages=get_flashed_messages() %}
+             {% if messages %}
+                 {% for message in messages %}
+                     {{ message }}
+                 {% endfor %}
+             {% endif %}
+    {% endwith %}
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $(document).ready(function () {
+           $('#treatment-form-wrapper').css('display','none');
+           $('.next-button').on('click',function (e) {
+                $('#patient-form-wrapper').fadeOut('slow',function () {
+                    $('#treatment-form-wrapper').fadeIn('slow');
+                });
+
+           });
+        });
+    </script>
+{% endblock %}

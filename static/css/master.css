@@ -1,0 +1,148 @@
+body {
+  margin: 0;
+  background: #f3f4f5;
+  color: #1a1a1a;
+  border-top: 3px solid #00cc99;
+}
+
+/* main font of the page */
+body, p {
+  font-family: ttf_source_sans, Open Sans, sans-serif;
+}
+@font-face {
+    font-family: ttf_source_sans;
+    src: url(fonts/Open-Sans/OpenSans-Regular.ttf);
+}
+@font-face {
+    font-family: ttf_source_code;
+    src: url(fonts/Source_Code_Pro/SourceCodePro-Regular.ttf);
+}
+
+
+.main_zone {
+  margin: 20px 25%;
+  display: block;
+}
+
+.logo {
+    margin: auto 20px;
+    color: ghostwhite;
+}
+
+button,
+.submit_button {
+  border: none;
+  background: #00aa77;
+  color: ghostwhite;
+  padding: 10px;
+  margin: 5px;
+  min-width: 90px;
+}
+
+button:hover,
+.submit_button:hover {
+    background: #00bb88;
+}
+
+.form {
+    padding: 1em 0;
+}
+
+.form_textbox {
+    padding: 7px;
+    font-family: ttf_source_sans;
+    min-width: 250px;
+}
+
+.wrap_form_zone {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.form_zone,
+form.appointment_zone {
+    max-width: 500px;
+    text-align: center;
+    padding: 2em;
+    background: #e6e6e6;
+    margin-right: 30px;
+}
+
+.new_patient_wrapper {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.patient_data {
+    padding: 10px;
+    background: #e6e6e6;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.thrash {
+    height: 35px;
+    width: 35px;
+}
+.data_rs {
+    height: 42px;
+    width: 42px;
+    margin-top: 20px;
+    margin-right: 20px;
+}
+
+.data_appoicon {
+    height: 75px;
+    width: 75px;
+    margin-top: 20px;
+    margin-right: 20px;
+}
+
+.delete_button {
+    background: #e6e6e6;
+    margin: 40px auto;
+}
+.delete_button:hover {
+    background: #d6d6d6;
+}
+
+.message {
+    padding: 10px;
+    margin: 10px 0;
+    font-size: 1.2em;
+    color: #009966;
+}
+
+.dropdown_box {
+    border-right: 6px solid #676;
+    background: #2d2d2d;
+    padding: 1px 12px 1px 1px;
+}
+.dropdown_box a::after {
+    color: #fff;
+}
+
+.appos_data {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.patient-listing {
+    border: 3px solid #666;
+    border-radius: 12px;
+    padding: 25px;
+}
+
+.patient-listing:hover {
+    border-color: #00bb88;
+    background: #f0f0f0;
+}
+
+.patient-listing p {
+    color: #00bb88;
+}
+
+.search-result-exp {
+    font-size: 0.8em;
+}

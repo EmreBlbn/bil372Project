@@ -1,0 +1,108 @@
+{% extends "layout.html" %}
+{% block page_content %}
+    <p style="font-size:1.2em">Tum hastalariniz ve bilgileri: </p>
+    <div>
+        <label for="search_box">Tum hastalari isim sirasina gore arama:</label>
+        <input type="text" id="search_box">
+        <div id="search-result" style="margin-bottom: 35px;">
+
+        </div>
+        <hr style="margin: 35px 0; border: 2px solid grey;">
+
+
+    </div>
+    {% for patient in patients %}
+        <div class="patient_data" id="{{ patient.p_id }}">
+            <div style="display: flex;
+                        justify-content: flex-start;">
+                <img src="{{ url_for('static', filename='images/logoimg_paw.png') }}" class="data_pawicon">
+                <br><br>
+                <p class="page_data_text">
+                    Ad: <b>{{ patient.p_name }}</b> <br>
+                    Soyad: <b>{{ patient.p_last_name }}</b> <br>
+                    Telefon: <b>{{ patient.p_phone }}</b> <br>
+                    Adres: <b>{{ patient.p_address }}</b> <br>
+                    Dogum Tarihi: <b>{{ patient.p_bdate }}</b> <br>
+                </p>
+            </div>
+
+            <div class="delete_zone">
+                <form class="" method="POST">
+                    <button type="submit"  class="delete_button" name="button-delete" value="{{patient.p_id}}">
+                        <img src="{{ url_for('static', filename='images/thrash.png') }}" class="thrash">
+                    </button>
+                </form>
+            </div>
+
+        </div>
+        <div class="treatment history-{{ patient.p_id }}">
+
+        </div>
+    {% endfor %}
+{% endblock %}
+
+{% block scripts %}
+    <script>
+
+    $(document).ready(function () {
+        $(".treatment").css('display','none');
+        $('#search_box').keyup(function (key) {
+            var key_value=key.which;
+            if(key_value != ""){
+                $.ajax({
+                        url: "/search_patient",
+                        data: {text:$('#search_box').val()},
+                        type: 'POST',
+                       }
+                ).done(function (data) {
+                            $('#search-result').html("");
+                            var parsed="";
+
+                            $.each(data.query, function(k, v) {
+                                parsed+='<div class="patient-data" id="'+v.p_name+'">' +
+                                            '<div  style="display: flex;justify-content: flex-start;">'+
+                                                '<img src="{{ url_for('static', filename='images/rs.png') }}" class="data_rs">'+
+                                                '<br><br>'+
+                                                '<p class="page_data_text">'+
+                                                    'Ad: '+"<b>"+v.p_name+"</b>"+",   "+
+
+                                                    'Soyad:'+"<b>"+v.p_last_name+"</b>"+",   "+
+                                                    'Telefon: '+"<b>"+v.p_phone+"</b>"+",   "+
+                                                    'Adres:'+"<b>"+ v.p_address+"</b>"+",   "+
+                                                    'Dogum Tarihi:'+"<b>"+ v.p_bdate+"</b>"+
+                                                '</p>'+
+                                            '</div>'+
+                                        '</div>'
+                            });
+                            $('#search-result').html(parsed);
+                        });
+            }
+        });
+
+        var div_id;
+        $('.patient_data').on('click',function (e) {
+            div_id=$(this).attr('id');
+           $.ajax({
+               url: '/get_treatments',
+               type: 'POST',
+               data: {text:parseInt($(this).attr('id'))}
+           }).done(function (data) {
+                var parse="";
+                $.each(data.query,function (k,v) {
+                   parse+='<p>'+"<b>Treatment Type: </b>"+v.Record_type+"<br>"+"<b>End date: </b>"+v.End_date+"<br>"+"<b>Start date:</b>"+v.Start_date+'</p>'
+                });
+                $(".history-"+div_id).html(parse);
+                $(".history-"+div_id).slideToggle();
+           });
+        });
+
+    });
+
+
+
+
+
+    </script>
+
+
+{% endblock %}

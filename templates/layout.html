@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/master.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/left_panel_style.css') }}">
+        <script src="{{ url_for('static', filename='js/dropdown.js') }}"></script>
+        <title>Doktor - Hasta Randevu Sorgulama Sistemine</title>
+    </head>
+    <body>
+    <div class="left_panel">
+        <a href="/"><h1 class="logo">Doktor - Hasta Randevu Sorgulama Sistemi</h1></a>
+        <img src="{{ url_for('static', filename='images/rs.png') }}" alt="" class="profile_picture">
+        {% if user %}
+        <p class="pol_name">{{ user.username }}</p>
+        {% endif %}
+
+        <div class="content">
+            <p class="dropdown_text" id="patient_dropdown"
+               onclick="PatientDropdown()">
+                Hastalar &ensp; <span style="font-size: 0.9em"> &#9660;</span>
+            </p>
+            <p class="dropdown_text" id="patient_dropclose"
+               onclick="PatientDropclose()">
+                Hastalar &ensp; <span style="font-size: 0.9em"> &#9650;</span>
+            </p>
+            <div class="dropdown_box" id="pdb">
+                <p><a href="/create_new_patient">Yeni Hasta Kayit</a></p>
+                <p><a href="/list_patient">Listelenen hastalar</a></p>
+            </div>
+            <div class="dropdown_box" id="pdb">
+                <p><a href="/register_new_treatment">Yeni Tedavi Giris</a></p>
+                <p><a href="/list_patient">Listelenen tedaviler</a></p>
+            </div>
+
+            <p class="dropdown_text" id="app_dropdown"
+               onclick="appDropdown()">
+                Randevular &ensp; <span style="font-size: 0.9em"> &#9660;</span>
+            </p>
+            <p class="dropdown_text" id="app_dropclose"
+               onclick="appDropclose()">
+                Randevular &ensp; <span style="font-size: 0.9em"> &#9650;</span>
+            </p>
+            <div class="dropdown_box" id="adb">
+                <p><a href="/make_appointment">Yeni Randevu Kayit</a></p>
+                <p><a href="/display_registers">Listelenen Randevular</a></p>
+            </div>
+
+            <p><a href="/profile" class="left_panel_link">Profil</a></p>
+            <p><a href="/logout" class="left_panel_link">Cikis Yap</a></p>
+
+        </div>
+    </div>
+    <div class="main_zone">
+        {% block page_content %}
+
+        {% endblock %}
+    </div>
+    {% block scripts %}
+    {% endblock %}
+    </body>
+</html>
