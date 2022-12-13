@@ -72,7 +72,7 @@ insert into APPUSER values (1,'poly1','polypoly1','polyclinic');
 insert into APPUSER values (2,'poly2','poly2poly','polyclinic');
 insert into APPUSER values (3,'doc1','thebest.*','doctor');
 insert into APPUSER values (4,'pat1','pfff12','patient');
--- insert into APPUSER values (5,'lab1','labulabu','laboratory');
+insert into APPUSER values (5,'lab1','labulabu','laboratory');
 insert into APPUSER values (6,'doc2','theworst.P','doctor');
 insert into APPUSER values (7,'pat2','pfff12','patient');
 
@@ -80,7 +80,7 @@ insert into POLYCLINIC values (1,'Genel Cerrahi','1','136');
 insert into POLYCLINIC values (2,'Uroloji','2','134/B');
 insert into doctor values (3,'12345678901','Osman','Abul','05305305300','E','01/01/1990','Genel Cerrahi','12345678901');
 insert into patient values (4,'99999999999','Asli','Celik','05999999999','Gaziosmanpasa/Ankara','01/01/1985');
--- insert into laboratory values (5,'1','99999999999','12345678901');
+insert into laboratory values (5,'12345678901','99999999999','1');
 insert into examines values ('12345678901','99999999999','15');
 insert into doctor values (6,'12345678999','Oguz','Ergin','05305301212','E','11/01/1970','Uroloji','12345678901');
 insert into patient values (7,'99999999123','Beyza','Kurek','0592999999','Mamak/Ankara',null);
