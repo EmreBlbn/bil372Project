@@ -147,9 +147,9 @@ def delete_appointment():
     db.session.commit()
     return jsonify({'msg': "{} silindi.".format(temp_appo.appo_id)})
 
-# @dashboard.route('/profile', methods=['GET', 'POST'])
-# @login_required
-# def profile2():
-#     doctor = DoctorForm()
-#     user = current_user.query.filter_by().first()
-#     return render_template('profile.html', user=user, doctor=doctor)
+@dashboard.route('/profile', methods=['GET', 'POST'])
+@login_required
+def profile2():
+    doctor = DoctorForm()
+    user = current_user.query.filter_by().first()
+    return render_template('profile.html', user=user, doctor=doctor)
