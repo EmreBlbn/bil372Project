@@ -19,6 +19,27 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(15), nullable=False, unique=True)
     user_password = db.Column(db.String(15), nullable=False)
     user_type = db.Column(db.String(10))
+
+    # user_p = db.relationship(
+    #     'Patient',
+    #     back_populates='id_user',
+    #     foreign_keys='Patient.p_id')
+    #
+    # user_pol = db.relationship(
+    #     'Polyclinic',
+    #     back_populates='id_user',
+    #     foreign_keys='Polyclinic.pol_id')
+    #
+    # user_d = db.relationship(
+    #     'Doctor',
+    #     back_populates='id_user',
+    #     foreign_keys='Doctor.doctor_id')
+    #
+    # user_l = db.relationship(
+    #     'Laboratory',
+    #     back_populates='id_user',
+    #     foreign_keys='Laboratory.lab_id')
+
     __mapper_args__ = {
         "polymorphic_identity": "user",
         "polymorphic_on": user_type
@@ -82,18 +103,34 @@ class Doctor(User):
     bdate = db.Column(db.DateTime)
     major = db.Column(db.String(25))
 
-    # supervisor_tc = db.Column(db.String(11))
-    #
+    supervisor_tc = db.Column(db.String(11))
+
     # supervisor = db.relationship(
-    #     'doctor',
+    #     'Doctor',
     #     back_populates='supervisee',
     #     foreign_keys=[supervisor_tc])
+    #
+    # supervisee = db.relationship(
+    #     'Doctor',
+    #     foreign_keys=[doctor_tc],
+    #     back_populates='supervisor')
+
+    treats1 = db.relationship(
+        'Treatment',
+        back_populates='treat_d',
+        foreign_keys='Treatment.d_tc')
+
+    # id_doctor = db.Column(db.Integer, db.ForeignKey('appuser.user_id'))
+    # id_user = db.relationship(
+    #     'User',
+    #     back_populates='user_d',
+    #     foreign_keys=[id_doctor])
 
     def user_dashboard(self):
         return render_template("doctor_dashboard.html", user=self)
 
     __mapper_args__ = {
-        "polymorphic_identity": "doctor",
+        "polymorphic_identity": "Doctor",
     }
 
     def __repr__(self):
@@ -117,22 +154,41 @@ class Patient(User):
     p_address = db.Column(db.String(50))
     p_bdate = db.Column(db.DateTime)
 
+    treats2 = db.relationship(
+        'Treatment',
+        back_populates='treat_p',
+        foreign_keys='Treatment.pa_tc')
+
+    appos1 = db.relationship(
+        'Appointment',
+        back_populates='appo_p',
+        foreign_keys='Appointment.tc_pat')
+
+    # id_patient = db.Column(db.Integer, db.ForeignKey('appuser.user_id'))
+    # id_user = db.relationship(
+    #     'User',
+    #     back_populates='user_p',
+    #     foreign_keys=[id_patient])
+
     def user_dashboard(self):
         return render_template("patient_dashboard.html", user=self)
 
     __mapper_args__ = {
-        "polymorphic_identity": "patient",
+        "polymorphic_identity": "Patient",
     }
 
     def __repr__(self):
         return super().__repr__()
 
-    @classmethod
+    # @classmethod
+    # def create_user(cls, username, password):
+    #     hashed_pw = bc.generate_password_hash(password).decode('utf-8')
+    #     new_user = cls(username=username, password=hashed_pw)
+    #     db.session.add(new_user)
+    #     db.session.commit()
+
     def create_user(cls, username, password):
-        hashed_pw = bc.generate_password_hash(password).decode('utf-8')
-        new_user = cls(username=username, password=hashed_pw)
-        db.session.add(new_user)
-        db.session.commit()
+        super().create_user(username=username, password=password)
 
 
 class Polyclinic(User):
@@ -142,8 +198,19 @@ class Polyclinic(User):
     pol_no = db.Column(db.String(1), nullable=False, primary_key=True)
     pol_location = db.Column(db.String(50), nullable=False)
 
+    appos2 = db.relationship(
+        'Appointment',
+        back_populates='appo_poly',
+        foreign_keys='Appointment.name_poly')
+
+    # id_polyclinic = db.Column(db.Integer, db.ForeignKey('appuser.user_id'))
+    # id_user = db.relationship(
+    #     'User',
+    #     back_populates='user_pol',
+    #     foreign_keys=[id_polyclinic])
+
     __mapper_args__ = {
-        "polymorphic_identity": "polyclinic",
+        "polymorphic_identity": "Polyclinic",
     }
 
     def __repr__(self):
@@ -152,35 +219,44 @@ class Polyclinic(User):
     def user_dashboard(self):
         return render_template("polyclinic_dashboard.html", user=self)
 
-    @classmethod
-    def create_user(cls, username, password, field=None):
-        hashed_pw = bc.generate_password_hash(password).decode('utf-8')
-        new_user = cls(username=username, password=hashed_pw, field=field)
-        db.session.add(new_user)
-        db.session.commit()
+    # @classmethod
+    # def create_user(cls, username, password, field=None):
+    #     hashed_pw = bc.generate_password_hash(password).decode('utf-8')
+    #     new_user = cls(username=username, password=hashed_pw, field=field)
+    #     db.session.add(new_user)
+    #     db.session.commit()
+
+    def create_user(cls, username, password):
+        super().create_user(username=username, password=password)
 
 
 class Laboratory(User):
     __tablename__ = 'laboratory'
-    # lab_id = db.Column(db.Integer, db.ForeignKey('appuser.user_id'))
-    # doc_tc = db.Column(db.String(11), nullable=False, db.ForeignKey('doctor.doctor_id'))
-    # pat_tc = db.Column(db.String(11), nullable=False, db.ForeignKey('doctor.doctor_id'))
-    # test_no = db.Column(db.String(10), nullable=False, primary_key=True)
-    # lab_result = db.Column(db.String(100), nullable=False)
-    #
-    # __mapper_args__ = {
-    #     "polymorphic_identity": "laboratory",
-    # }
-    #
-    # def __repr__(self):
-    #     return super().__repr__()
-    #
-    # @classmethod
-    # def create_user(cls, username, password):
-    #     super().create_user(username=username, password=password)
-    #
-    # def user_dashboard(self):
-    #     return render_template("laboratory_dashboard.html", user=self)
+    lab_id = db.Column(db.Integer, db.ForeignKey('appuser.user_id'))
+    doc_tc = db.Column(db.String(11), db.ForeignKey('doctor.doctor_tc'))
+    pat_tc = db.Column(db.String(11), db.ForeignKey('patient.p_id'))
+    test_no = db.Column(db.String(10), nullable=False, primary_key=True)
+    lab_result = db.Column(db.String(100))
+
+    # id_laboratory = db.Column(db.Integer, db.ForeignKey('appuser.user_id'))
+    # id_user = db.relationship(
+    #     'User',
+    #     back_populates='user_l',
+    #     foreign_keys=[id_laboratory])
+
+    __mapper_args__ = {
+        "polymorphic_identity": "Laboratory",
+    }
+
+    def __repr__(self):
+        return super().__repr__()
+
+    @classmethod
+    def create_user(cls, username, password):
+        super().create_user(username=username, password=password)
+
+    def user_dashboard(self):
+        return render_template("laboratory_dashboard.html", user=self)
 
 
 class AdminView(AdminIndexView):

@@ -52,20 +52,32 @@ CREATE TABLE LABORATORY
 	doc_tc char(11),
 	pat_tc char(11),
 	test_no char(11) UNIQUE,
+	lab_result varchar(100),
 	Primary key(test_no),
 	Foreign key(lab_id) REFERENCES APPUSER (user_id),
 	Foreign key(pat_tc) REFERENCES PATIENT (p_tc),
 	Foreign key(doc_tc) REFERENCES DOCTOR (doctor_tc)
 );
 
-CREATE TABLE EXAMINES
+CREATE TABLE TREATMENT
 (
 	d_tc char(11) unique,
 	pa_tc char(11) unique,
-	duration char(2) NOT NULL,
+	diagnosis varchar(50),
+	treatment varchar(250),
 	Primary key(d_tc, pa_tc),
 	Foreign key(d_tc) REFERENCES DOCTOR (doctor_tc),
 	Foreign key(pa_tc) REFERENCES PATIENT (p_tc)
+);
+
+CREATE TABLE APPOINTMENT
+(
+    appo_no char(10) unique,
+	poly_name char(25) unique,
+	pati_tc char(11) unique,
+	Primary key(appo_no),
+	Foreign key(poly_name) REFERENCES POLYCLINIC (pol_name),
+	Foreign key(pati_tc) REFERENCES PATIENT (p_tc)
 );
 
 insert into APPUSER values (1,'poly1','polypoly1','polyclinic');
@@ -81,6 +93,6 @@ insert into POLYCLINIC values (2,'Uroloji','2','134/B');
 insert into doctor values (3,'12345678901','Osman','Abul','05305305300','E','01/01/1990','Genel Cerrahi','12345678901');
 insert into patient values (4,'99999999999','Asli','Celik','05999999999','Gaziosmanpasa/Ankara','01/01/1985');
 insert into laboratory values (5,'12345678901','99999999999','1');
-insert into examines values ('12345678901','99999999999','15');
+insert into TREATMENT values ('12345678901','99999999999','insomnia','xanax');
 insert into doctor values (6,'12345678999','Oguz','Ergin','05305301212','E','11/01/1970','Uroloji','12345678901');
 insert into patient values (7,'99999999123','Beyza','Kurek','0592999999','Mamak/Ankara',null);
