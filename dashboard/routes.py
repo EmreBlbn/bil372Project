@@ -1,15 +1,15 @@
+from datetime import datetime
+
 import psycopg2
 from flask import Blueprint, render_template, flash, request, jsonify
 from flask_login import login_required, current_user
-
 from flask_sqlalchemy import get_debug_queries
-
-from dashboard.forms import AppointmentCreationForm, TreatmentCreationForm, PatientCreationForm, DoctorForm
-from dashboard.models import Appointment, Treatment
-from datetime import datetime
+#from flask_sqlalchemy import or_
 
 from app import db, POSTGRES_PASS, POSTGRES_USER, POSTGRES_DB, POSTGRES_URL
-from users.models import Patient
+from dashboard.forms import AppointmentCreationForm, TreatmentCreationForm, PatientCreationForm, DoctorForm
+from dashboard.models import Appointment, Treatment
+from users.models import Patient, Polyclinic
 
 dashboard = Blueprint('dashboard', __name__)
 
@@ -30,10 +30,12 @@ def create_appointment():
 
     if request.method == 'POST':
         if form.validate_on_submit():
-            patient = Patient.query.filter_by(tc=form.patient_tc.data).first()
+            patient = Patient.query.filter_by(p_tc=form.patient_tc.data).first()
+            print('yeto')
             new_appointment = Appointment(
                 patient_tc=patient.p_tc,
-                on=datetime.combine(form.on.data, form.hour.data),
+                poly_name=Polyclinic.pol_name,
+                on_date=datetime.combine(form.on.data, form.hour.data),
             )
             current_user.appos.append(new_appointment)
 
@@ -89,7 +91,7 @@ def create_patient():
                     sameTCFlag = True
 
             if not sameTCFlag:
-                db.session.add( new_patient)
+                db.session.add(new_patient)
                 # ustteki komut:
                 # INSERT INTO appuser (username, user_password, user_type) VALUES (%(username)s, %(user_password)s, %(user_type)s);
                 db.session.commit()
@@ -164,7 +166,12 @@ def display_registers():
 def search_patient():
     if request.form['text'] == "":
         return jsonify({})
-    patients = Patient.query.filter(Patient.p_name.ilike("%" + request.form['text'] + "%")).all()
+    patients = Patient.query.filter(
+
+            Patient.p_tc.ilike("%" + request.form['text'] + "%") |
+            Patient.p_name.ilike("%" + request.form['text'] + "%")
+
+    ).all()
     results = [p.to_dict() for p in patients]
     return jsonify({'query': results})
 

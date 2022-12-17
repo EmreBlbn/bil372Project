@@ -59,7 +59,7 @@
                             var parsed="";
 
                             $.each(data.query, function(k, v) {
-                                parsed+='<div class="patient-data" id="'+v.p_name+'">' +
+                                parsed+='<div class="patient-data" id="'+v.p_id+'">' +
                                             '<div  style="display: flex;justify-content: flex-start;">'+
                                                 '<img src="{{ url_for('static', filename='images/rs.png') }}" class="data_rs">'+
                                                 '<br><br>'+

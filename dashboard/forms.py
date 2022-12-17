@@ -30,7 +30,8 @@ class PatientCreationForm(FlaskForm):
 class AppointmentCreationForm(FlaskForm):
     on = DateField('Tarih:')
     hour = TimeField('Saat:')
-    patient_tc = StringField('Hasta:', validators=[DataRequired()])
+    patient_name = StringField('Hasta adi:')
+    patient_tc = StringField('Hasta TCKN:', validators=[DataRequired()])
     submit_button = SubmitField('Yarat')
 
 

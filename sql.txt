@@ -72,10 +72,9 @@ CREATE TABLE TREATMENT
 
 CREATE TABLE APPOINTMENT
 (
-    appo_no char(10) unique,
+    on_date date,
 	poly_name char(25) unique,
-	pati_tc char(11) unique,
-	Primary key(appo_no),
+	patient_tc char(11) unique,
 	Foreign key(poly_name) REFERENCES POLYCLINIC (pol_name),
 	Foreign key(pati_tc) REFERENCES PATIENT (p_tc)
 );

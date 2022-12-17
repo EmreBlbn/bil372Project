@@ -7,7 +7,12 @@
             <div class="form">
                 {{ form.patient_tc.label }}<br>
                 {{ form.patient_tc(class_="form_textbox") }}
-            </div><br>
+            </div>
+
+            <div class="form">
+                {{ form.patient_name.label }}<br>
+                {{ form.patient_name(class_="form_textbox") }}
+            </div>
 
             <div class="form">
                 {{ form.on.label }}<br>
@@ -29,7 +34,7 @@
             <br/>
 
         </form>
-         <div class="message">
+         <div class="alert">
             {%  with messages=get_flashed_messages() %}
                 {% if messages %}
                     {% for message in messages %}
@@ -46,12 +51,12 @@
 {% block scripts %}
         <script>
         var patients;
-        $('#patient_tc').keyup(function (key) {
+        $('#patient_tc, #patient_name').keyup(function (key) {
             var key_value=key.which;
             if(key_value != ""){
                 $.ajax({
                         url: "/search_patient",
-                        data: {text:$('#patient_tc').val()},
+                        data: {text:$('#patient_name').val() + $('#patient_tc').val()},
                         type: 'POST',
                        }
                 ).done(function (data) {

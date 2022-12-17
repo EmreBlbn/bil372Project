@@ -4,7 +4,7 @@ from app import db
 class Appointment(db.Model):
     __tablename__ = 'appointment'
     appo_no = db.Column(db.Integer, primary_key=True)
-    on = db.Column(db.DateTime, nullable=False)
+    on_date = db.Column(db.DateTime, nullable=False)
     pati_tc = db.Column(db.String(11), nullable=False)
     poly_name = db.Column(db.String(25), nullable=False)
 

@@ -175,9 +175,9 @@ class Patient(User):
     def to_dict(self):
         return {
             "TC": self.p_tc,
-            "ad": self.p_name,
-            "soyad": self.p_last_name,
-            "telefon": self.p_phone
+            "Ad": self.p_name,
+            "Soyad": self.p_last_name,
+            "Telefon": self.p_phone
         }
 
     def create_user(cls, username, password):

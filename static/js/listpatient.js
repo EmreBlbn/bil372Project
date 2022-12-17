@@ -9,7 +9,7 @@ $('#search_box').keyup(function (key) {
                 	var parse="";
 					for(var i=0;data.length;i++){
 						var obj=data.query[i];
-						parse+="<p> patient id:"+obj.id+", "+"obj name: "+ obj.name+"</p><br>";
+						parse+="<p> p id:"+obj.p_id+", "+"obj name: "+ obj.p_name+", "+"obj tc: "+ obj.p_tc+"</p><br>";
 					}
                     $('#search-result').html(parse);
                 }
