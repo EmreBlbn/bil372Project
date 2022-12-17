@@ -1,6 +1,6 @@
 import psycopg2
 from flask import Flask, render_template
-from flask_login import LoginManager, login_user
+from flask_login import LoginManager, current_user
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_marshmallow import Marshmallow
@@ -62,16 +62,4 @@ def index():
     return render_template('index.html', books=books, books2=books2)
 
 
-@app.route('/page2')
-def layout():
-    conn = get_db_connection()
-    cur = conn.cursor()
-    cur.execute('SELECT * FROM polyclinic;')
-    deneme = conn.cursor()
-    deneme.execute('SELECT * FROM laboratory;')
-    books = cur.fetchall()
-    books2 = deneme.fetchall()
-    cur.close()
-    deneme.close()
-    conn.close()
-    return render_template('index.html', books=books, books2=books2)
+

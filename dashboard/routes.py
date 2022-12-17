@@ -1,13 +1,14 @@
+import psycopg2
 from flask import Blueprint, render_template, flash, request, jsonify
 from flask_login import login_required, current_user
 
 from flask_sqlalchemy import get_debug_queries
 
-from dashboard.forms import AppointmentCreationForm, TreatmentCreationForm, PatientForm, DoctorForm, PatientCreationForm
+from dashboard.forms import AppointmentCreationForm, TreatmentCreationForm, PatientCreationForm, DoctorForm
 from dashboard.models import Appointment, Treatment
 from datetime import datetime
 
-from app import db
+from app import db, POSTGRES_PASS, POSTGRES_USER, POSTGRES_DB, POSTGRES_URL
 from users.models import Patient
 
 dashboard = Blueprint('dashboard', __name__)
@@ -45,9 +46,22 @@ def create_appointment():
     return render_template('appointment.html', form=form)
 
 
-@dashboard.route('/create_patient', methods=['GET', 'POST'])
+@dashboard.route('/create_new_patient', methods=['GET', 'POST'])
 @login_required
-def create_patient():  # TODO bos is, kullanim yok
+def create_patient():
+    conn = get_db_connection()
+    usr_id_s = conn.cursor()
+    usr_id_s.execute('SELECT user_id FROM appuser;')
+    user_ids = usr_id_s.fetchall()
+    patient_usrnames = conn.cursor()
+    patient_usrnames.execute('SELECT p_name FROM patient, appuser where p_id=user_id;')
+    # remove edildiginde appuser database'inden silinmeyip, patient database'inden silindigi icin
+    # kullanici adi auto gen. icin yapildi.
+    patient_usernames = patient_usrnames.fetchall()
+    pat_tcs = conn.cursor()
+    pat_tcs.execute('SELECT p_tc FROM patient;')
+    patient_tc = pat_tcs.fetchall()
+
     patient_creation_form = PatientCreationForm()
     if request.method == 'GET':
         return render_template('create_patient.html', patient_creation_form=patient_creation_form)
@@ -61,11 +75,28 @@ def create_patient():  # TODO bos is, kullanim yok
                 p_bdate=patient_creation_form.p_bdate.data,
                 p_phone=patient_creation_form.p_phone.data,
                 p_address=patient_creation_form.p_address.data,
+                user_id=len(user_ids) + 1,
+                username='pat' + str(len(patient_usernames) + 1),
+                user_password='123456',
+                user_type='Patient'
             )
-            db.session.add(new_patient)
-            db.session.commit()
-            flash('Hasta bilgileri olusturuldu.')
-    return None
+
+            sameTCFlag = False
+            for tc in patient_tc:
+                print('length Ptc = ' + str(len(patient_tc)))
+                if new_patient.p_tc == tc[0]:
+                    flash('Hata Olustu : Insan mi klonluyoruz???.', 'error')
+                    sameTCFlag = True
+
+            if not sameTCFlag:
+                db.session.add( new_patient)
+                # ustteki komut:
+                # INSERT INTO appuser (username, user_password, user_type) VALUES (%(username)s, %(user_password)s, %(user_type)s);
+                db.session.commit()
+                flash('Bilgi : Hasta bilgileri olusturuldu.', 'message')
+
+    return render_template('create_patient.html', user=current_user,
+                           patient_creation_form=patient_creation_form)
 
 
 @dashboard.route('/register_new_treatment', methods=['GET', 'POST'])
@@ -133,7 +164,7 @@ def display_registers():
 def search_patient():
     if request.form['text'] == "":
         return jsonify({})
-    patients = Patient.query.filter(Patient.name.like("%" + request.form['text'] + "%")).all()
+    patients = Patient.query.filter(Patient.p_name.ilike("%" + request.form['text'] + "%")).all()
     results = [p.to_dict() for p in patients]
     return jsonify({'query': results})
 
@@ -147,9 +178,33 @@ def delete_appointment():
     db.session.commit()
     return jsonify({'msg': "{} silindi.".format(temp_appo.appo_id)})
 
+
 @dashboard.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile2():
     doctor = DoctorForm()
     user = current_user.query.filter_by().first()
     return render_template('profile.html', user=user, doctor=doctor)
+
+
+def get_db_connection():
+    conn = psycopg2.connect(host=POSTGRES_URL,
+                            database=POSTGRES_DB,
+                            user=POSTGRES_USER,
+                            password=POSTGRES_PASS)
+    return conn
+
+
+def layout():
+    conn = get_db_connection()
+    usr_id_s = conn.cursor()
+    usr_id_s.execute('SELECT user_id FROM appuser where user_type=\'Patient\';')
+    not_patient = True
+    pat_id_s = usr_id_s.fetchall()
+    usr = current_user.current_user.query.filter_by().first().user_id
+    for id in pat_id_s:
+        if id == current_user.current_user.query.filter_by().first().user_id:
+            not_patient = False
+    usr_id_s.close()
+    conn.close()
+    return render_template('layout.html', not_patient=not_patient, usr=usr)

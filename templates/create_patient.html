@@ -1,125 +1,89 @@
-{% extends 'layout.html' %}
+{% extends "layout.html" %}
 {% block page_content %}
-
-    <div style="display: flex; justify-content: flex-start;">
-        <div class="new_patient_wrapper">
-            <div>
-
-                <form method="POST" class="wrap_form_zone" >
-                    <div class="form_zone" id="patient-form-wrapper">
-
-                         {{ patient_creation_form.hidden_tag() }}
-                        <p>Hasta hakkindaki bilgileri girin.</p>
-                        <div class="form">
-                         {{ patient_creation_form.p_name.label }}<br>
-                         {{ patient_creation_form.patient_name(class_="form_textbox") }}
-                        </div>
-                        <div class="form">
-                         {{ patient_creation_form.p_last_name.label }}<br>
-                         {{ patient_creation_form.p_last_name(class_="form_textbox") }}
-                        </div>
-                        <div class="form">
-                         {{ patient_creation_form.p_tc.label }}<br>
-                         {{ patient_creation_form.p_tc(class_="form_textbox") }}
-                        </div>
-                        <div class="form">
-                         {{ patient_creation_form.p_phone.label }}<br>
-                         {{ patient_creation_form.p_phone(class_="form_textbox") }}
-                        </div>
-                        <div class="form">
-                         {{ patient_creation_form.p_address.label }}<br>
-                         {{ patient_creation_form.p_address(class_="form_textbox") }}
-                        </div>
-                        <div class="form">
-                         {{ patient_creation_form.p_bdate.label }}<br>
-                         {{ patient_creation_form.p_bdate(class_="form_textbox") }}
-
-
-                        </div>
-                        <button type="button" class="submit_button next-button">Next ></button>
-                    </div>
-                    <br><br>
-
-                 </form>
+    <div class="appos_data">
+        <form method="POST" class=appointment_zone>
+            {{ patient_creation_form.hidden_tag() }}
+            <div class="form">
+            <p>Hasta bilgileeriniz seciniz.<br></p>
             </div>
 
+            <div class="form">
+                {{ patient_creation_form.p_name.label }}<br>
+                {{ patient_creation_form.p_name(class_="form_textbox") }}
+            </div>
+
+            <div class="form">
+                {{ patient_creation_form.p_last_name.label }}<br>
+                {{ patient_creation_form.p_last_name(class_="form_textbox") }}
+            </div>
+
+            <div class="form">
+                {{ patient_creation_form.p_tc.label }}<br>
+                {{ patient_creation_form.p_tc(class_="form_textbox") }}
+            </div>
+
+            <div class="form">
+                {{ patient_creation_form.p_bdate.label }}<br>
+                {{ patient_creation_form.p_bdate(class_="form_textbox") }}
+            </div>
+
+            <div class="form">
+                {{ patient_creation_form.p_phone.label }}<br>
+                {{ patient_creation_form.p_phone(class_="form_textbox") }}
+            </div>
+
+            <div class="form">
+                {{ patient_creation_form.p_address.label }}<br>
+                {{ patient_creation_form.p_address(class_="form_textbox") }}
+            </div>
+
+{#            <div class="form">#}
+{#                {{ patient_creation_form.username.label }}<br>#}
+{#                {{ patient_creation_form.username(class_="form_textbox") }}#}
+{#            </div>#}
+{##}
+{#            <div class="form">#}
+{#                {{ patient_creation_form.user_password.label }}<br>#}
+{#                {{ patient_creation_form.user_password(class_="form_textbox") }}#}
+{#            </div>#}
+
+            <br><br>
+            <br>{{ patient_creation_form.submit_button(class_="submit_button") }}
+            <br/>
+
+        </form>
+        <style>
+            .alert{
+                opacity: 1;
+                transition: opacity 0.6s;
+            }
+        </style>
 
 
-        </div>
-        <div id="search_result">
 
-        </div>
-    </div>
+            <div class="alert">
+                <span class="closebutton" onclick="hideAlert()" >&times;</span>
+                <script>
+                    var close = document.getElementsByClassName("closebutton");
+                    var i;
 
-
-    <div class="message">
-    {%  with messages=get_flashed_messages() %}
-             {% if messages %}
-                 {% for message in messages %}
-                     {{ message }}
-                 {% endfor %}
-             {% endif %}
-    {% endwith %}
-    </div>
-
-{% endblock %}
-
-{% block scripts %}
-    <script>
-        $(document).ready(function () {
-            var patients;
-            $('#p_name').keyup(function (key) {
-                var key_value=key.which;
-                if(key_value != ""){
-                    $.ajax({
-                            url: "/search_patient",
-                            data: {text:$('#p_name').val()},
-                            type: 'POST',
-                           }
-                    ).done(function (data) {
-                                patients=data.query;
-                                $('#search_result').html("");
-                                var parsed="";
-                                $.each(patients, function(k, v) {
-                                    parsed+= '<p class="search-result-exp">Arama sonuclari: </p>' +
-
-                                        '<div class="patient-listing" id="'+v.p_id+'">'+
-                                                'Ad: '+v.p_name+","+ "<br>" +
-                                                'Soyad: '+v.p_last_name+","+ "<br>" +
-                                                'Tc: '+v.p_tc+","+ "<br>" +
-                                                'Telefon: '+v.p_bdate+","+ "<br>" +
-                                                'Adres: '+v.p_phone+","+ "<br>" +
-                                                'Dogum Tarihi: '+v.p_address+
-                                            '</div>'
-                                });
-                                $('#search_result').html(parsed);
-                            });
-                }
-            });
-
-            $('#search_result').on("click","div.patient-listing",function (e) {
-                $('#search_result').html("");
-                $('#p_name').val("");
-                $('#p_last_name').val("");
-                $('#p_tc').val("");
-                $('#p_phone').val("");
-                $('#p_addres').val("");
-                $('#p_bdate').val("");
-
-                var p_id=toString($(this).attr('id'));
-                $.each(patients,function (k,v) {
-                    if(toString(v.Id)===p_id){
-                        $('#p_name').val(v.p_name);
-                        $('#p_last_name').val(v.p_last_name);
-                        $('#p_tc').val(v.p_tc);
-                        $('#p_phone').val(v.p_phone);
-                        $('#p_address').val(v.p_address);
-                        $('#p_bdate').val(v.p_bdate);
+                    for (i=0; i<close.length; i++){
+                        close[i].onclick = function hideAlert(){
+                            $('#onclick-event').html("");
+                            var div =  this.parentElement;
+                            div.style.opacity = "0";
+                            setTimeout(function (){div.style.display = 'none'; },300)
+                        }
                     }
-                });
+                </script>
 
-            });
-
-        });
-    </script>
+            {%  with messages=get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category,message in messages %}
+                            <div class="{{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </div>
+    </div>
 {% endblock %}

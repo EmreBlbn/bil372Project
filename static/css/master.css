@@ -41,7 +41,9 @@ button,
 
 button:hover,
 .submit_button:hover {
-    background: #00bb88;
+    background: #0883d7;
+    font-weight: bold;
+
 }
 
 .form {
@@ -145,4 +147,43 @@ form.appointment_zone {
 
 .search-result-exp {
     font-size: 0.8em;
+}
+.error{
+    padding: 20px;
+    background-color: #f44336;
+    border-radius: 8px 8px 8px 8px;
+    font-weight: bold;
+    color: white;
+    min-width: 310px;
+    min-height: 40px;
+    width: fit-content;
+    height: fit-content;
+    margin-bottom: 15px;
+}
+.message{
+    padding: 20px;
+    background-color: #009966;
+    border-radius: 8px 8px 8px 8px;
+    font-weight: bold;
+    color: white;
+    min-width: 310px;
+    min-height: 40px;
+    width: fit-content;
+    height: fit-content;
+    margin-bottom: 15px;
+}
+.closebutton{
+      padding: 3px ;
+      margin-left: 15px;
+      color: white;
+      font-weight: bold;
+      float: right;
+      font-size: 18px;
+      line-height: 20px;
+      cursor: pointer;
+      transition: 0.3s;
+}
+.closebutton:hover {
+    color: black;
+    font-weight: bolder;
 }

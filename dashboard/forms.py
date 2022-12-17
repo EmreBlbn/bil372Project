@@ -15,17 +15,6 @@ class DoctorForm(FlaskForm):
     submit_button = SubmitField('Hasta Kaydet')
 
 
-class PatientForm(FlaskForm):
-    p_name = StringField('Ad:', validators=[DataRequired()])
-    p_last_name = StringField('Soyad:', validators=[DataRequired()])
-    p_phone = StringField('Telefon:', validators=[DataRequired()])
-    p_tc = StringField('TC No:', validators=[DataRequired()])
-    p_address = StringField('Adres:')
-    p_bdate = DateField('Dogum Tarihi:')
-    submit_button = SubmitField('Hasta Kaydet')
-# TODO ustteki ikisini neden yazdim ki
-
-
 class PatientCreationForm(FlaskForm):
     p_name = StringField('Ad:', validators=[DataRequired()])
     p_last_name = StringField('Soyad:', validators=[DataRequired()])
@@ -33,6 +22,8 @@ class PatientCreationForm(FlaskForm):
     p_tc = StringField('TC No:', validators=[DataRequired()])
     p_address = StringField('Adres:')
     p_bdate = DateField('Dogum Tarihi:')
+    # username = StringField('Kullanici Adi:', validators=[DataRequired()])
+    # user_password = StringField('Sifre:', validators=[DataRequired()])
     submit_button = SubmitField('Hasta Kaydet')
 
 
