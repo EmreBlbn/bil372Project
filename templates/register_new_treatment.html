@@ -2,15 +2,18 @@
 {% block page_content %}
 
     <div style="display: flex; justify-content: flex-start;">
-        <div class="new_patient_wrapper">
+        <div class="appos_data">
             <div>
-                <form method="POST" class="wrap_form_zone" >
-                    <div class="form_zone" id="patient-form-wrapper">
-
+                <form method="POST" class="appointment_zone" >
+                    <div class="form" >
                         {{ treatment_creation_form.hidden_tag() }}
                         <p>Tedavi bilgilerini girin.</p>
 
-                        <div class="form_zone" id="treatment-form-wrapper">
+                        <div class="form">
+                            <div class="form">
+                                 {{ treatment_creation_form.patient_tckn.label }}<br>
+                                 {{ treatment_creation_form.patient_tckn(class_="form_textbox") }}
+                             </div>
                              <div class="form">
                                  {{ treatment_creation_form.diagnosis.label }}<br>
                                  {{ treatment_creation_form.diagnosis(class_="form_textbox") }}
@@ -28,7 +31,7 @@
             </div>
         </div>
     </div>
-    <div class="message">
+    <div class="alert">
     {%  with messages=get_flashed_messages() %}
              {% if messages %}
                  {% for message in messages %}

@@ -114,6 +114,7 @@ def register_new_treatment():
         if treatment_creation_form.validate_on_submit():
             add_list = []
             new_treatment = Treatment(
+                patient_tckn=treatment_creation_form.patient_tckn.data,
                 diagnosis=treatment_creation_form.diagnosis.data,
                 treatment=treatment_creation_form.treatment.data,
             )
@@ -139,12 +140,25 @@ def list_patient():
     return render_template('list_patient.html', patients=patients)
 
 
+@dashboard.route('/list_treatments', methods=['GET', 'POST'])
+@login_required
+def list_treatments():
+    treatments = Treatment.query.all()
+    print(get_debug_queries())
+    if request.method == "POST":
+        id = request.form['button-delete']
+        Treatment.query.filter_by(patient_tc=id).delete()
+        db.session.commit()
+        treatments = Treatment.query.all()
+        return render_template('list_treatments.html', treatments=treatments)
+    return render_template('list_treatments.html', treatments=treatments)
+
 @dashboard.route('/delete_patient', methods=['GET'])
 @login_required
 def delete_patient():
     p_id = request.args['button-delete']
     temp_patient = Patient.query.filter_by(p_id=p_id)
-    Patient.query.filter_by(patiet_id=p_id).delete()
+    Patient.query.filter_by(patient_id=p_id).delete()
     db.session.commit()
     return jsonify({'msg': "{} silindi.".format(temp_patient.p_name)})
 
@@ -166,6 +180,8 @@ def display_registers():
         return render_template('display_registers.html', appointments=appointments)
 
     return render_template('display_registers.html', appointments=appointments)
+
+
 
 
 @dashboard.route('/search_patient', methods=['POST'])

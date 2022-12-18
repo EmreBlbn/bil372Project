@@ -4,7 +4,7 @@
         <form method="POST" class=appointment_zone>
             {{ patient_creation_form.hidden_tag() }}
             <div class="form">
-            <p>Hasta bilgileeriniz seciniz.<br></p>
+            <p>Hasta bilgileriniz seciniz.<br></p>
             </div>
 
             <div class="form">
@@ -36,16 +36,6 @@
                 {{ patient_creation_form.p_address.label }}<br>
                 {{ patient_creation_form.p_address(class_="form_textbox") }}
             </div>
-
-{#            <div class="form">#}
-{#                {{ patient_creation_form.username.label }}<br>#}
-{#                {{ patient_creation_form.username(class_="form_textbox") }}#}
-{#            </div>#}
-{##}
-{#            <div class="form">#}
-{#                {{ patient_creation_form.user_password.label }}<br>#}
-{#                {{ patient_creation_form.user_password(class_="form_textbox") }}#}
-{#            </div>#}
 
             <br><br>
             <br>{{ patient_creation_form.submit_button(class_="submit_button") }}

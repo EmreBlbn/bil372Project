@@ -36,6 +36,7 @@ class AppointmentCreationForm(FlaskForm):
 
 
 class TreatmentCreationForm(FlaskForm):
+    patient_tckn = StringField('Hasta TC:')
     diagnosis = StringField('Tani:')
     treatment = StringField('Tedavi: ')
     submit_button = SubmitField('Yarat')

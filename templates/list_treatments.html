@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+<script>
+    window.onload = function() { countMedicines() };
+    function countMedicines() {
+
+        document.getElementById("numberZone").innerHTML = "asdmk";
+    }
+
+</script>
+{% block page_content %}
+    <p style="font-size:1.2em">Tum tani ve tedaviler: </p>
+    {% for treatment in treatments  %}
+        <div class="patient_data" id="{{ treatment.pa_tc }}">
+            <div style="display: flex;
+                        justify-content: flex-start;">
+                <img src="{{ url_for('static', filename='images/medicine.png') }}" class="data_appoicon">
+                <br><br>
+                <p class="page_data_text">
+                    Tani: <b>{{ treatment.diagnosis }}</b> <br>
+                    Tedavi: <b>{{ treatment.treatment }}</b> <br>
+                </p>
+            </div>
+
+            <div class="delete_zone">
+                <form class="" method="POST">
+                    <button type="submit"  class="delete_button" name="button-delete" value="{{ treatment.pa_tc }}">
+                        <img src="{{ url_for('static', filename='images/thrash.png') }}" class="thrash">
+                    </button>
+                </form>
+            </div>
+        </div>
+
+    {% endfor %}
+    <div id="numberZone"></div>
+{% endblock %}
+

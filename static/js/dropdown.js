@@ -24,4 +24,14 @@ function appDropclose() {
 }
 
 
+function appDropdown2() {
+    document.getElementById('app_dropdown2').style.display = "none";
+    document.getElementById('app_dropclose2').style.display = "block";
+    document.getElementById('tdb').style.display = "block";
+}
 
+function appDropclose2() {
+    document.getElementById('app_dropdown2').style.display = "block";
+    document.getElementById('app_dropclose2').style.display = "none";
+    document.getElementById('tdb').style.display = "none";
+}
