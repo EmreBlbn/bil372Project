@@ -136,7 +136,10 @@ class Patient(User):
     appos1 = db.relationship(
         'Appointment',
         back_populates='appo_p',
-        foreign_keys='Appointment.tc_pat')
+        foreign_keys='Appointment.patient_tc',
+        primaryjoin='Appointment.patient_tc==Patient.p_tc'
+    )
+
 
     def user_dashboard(self):
         return render_template("patient_dashboard.html", user=self)
@@ -150,7 +153,7 @@ class Patient(User):
 
 
     def __repr__(self):
-        return "tc:{} ad:{} soyad:{} telefon:{}".format(
+        return "TC:{} Ad:{} Soyad:{} Telefon:{}".format(
             self.p_tc, self.p_name, self.p_last_name, self.p_phone)
 
     def create_patient(
@@ -194,7 +197,7 @@ class Polyclinic(User):
     appos2 = db.relationship(
         'Appointment',
         back_populates='appo_poly',
-        foreign_keys='Appointment.name_poly')
+        foreign_keys='Appointment.poly_name')
 
     __mapper_args__ = {
         "polymorphic_identity": "Polyclinic",

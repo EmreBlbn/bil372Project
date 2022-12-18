@@ -49,23 +49,23 @@
         $('#search_box').keyup(function (key) {
             var key_value=key.which;
             if(key_value != ""){
+                console.log("ROHAT")
                 $.ajax({
                         url: "/search_patient",
                         data: {text:$('#search_box').val()},
+                        dataType:'json',
                         type: 'POST',
-                       }
-                ).done(function (data) {
+                        success: function(data){
                             $('#search-result').html("");
-                            var parsed="";
-
-                            $.each(data.query, function(k, v) {
+                             var parsed="";
+                             console.info(data)
+                            $.each(data.query,function (k,v){
                                 parsed+='<div class="patient-data" id="'+v.p_id+'">' +
                                             '<div  style="display: flex;justify-content: flex-start;">'+
                                                 '<img src="{{ url_for('static', filename='images/rs.png') }}" class="data_rs">'+
                                                 '<br><br>'+
                                                 '<p class="page_data_text">'+
                                                     'Ad: '+"<b>"+v.p_name+"</b>"+",   "+
-
                                                     'Soyad:'+"<b>"+v.p_last_name+"</b>"+",   "+
                                                     'Telefon: '+"<b>"+v.p_phone+"</b>"+",   "+
                                                     'Adres:'+"<b>"+ v.p_address+"</b>"+",   "+
@@ -74,8 +74,11 @@
                                             '</div>'+
                                         '</div>'
                             });
-                            $('#search-result').html(parsed);
-                        });
+                             $('#search-result').html(parsed);
+
+                        }
+                       }
+                )
             }
         });
 

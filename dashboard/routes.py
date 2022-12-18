@@ -31,15 +31,17 @@ def create_appointment():
     if request.method == 'POST':
         if form.validate_on_submit():
             patient = Patient.query.filter_by(p_tc=form.patient_tc.data).first()
-            print('yeto')
+            polyclinic = Polyclinic.query.filter_by(pol_name=form.polyclinic_name.data).first()
             new_appointment = Appointment(
                 patient_tc=patient.p_tc,
-                poly_name=Polyclinic.pol_name,
+                poly_name=polyclinic.pol_name,
                 on_date=datetime.combine(form.on.data, form.hour.data),
             )
-            current_user.appos.append(new_appointment)
+            if current_user.user_type == 'Patient':
+                current_user.appos1.append(new_appointment)
 
-            patient.appointments.append(new_appointment)
+            if current_user.user_type == 'Polyclinic':
+                current_user.appos2.append(new_appointment)
 
             db.session.add(new_appointment)
             db.session.commit()
@@ -150,7 +152,12 @@ def delete_patient():
 @dashboard.route('/display_registers', methods=['GET', 'POST'])
 @login_required
 def display_registers():
-    appointments = current_user.appos
+    if current_user.user_type == 'Patient':
+        appointments = current_user.appos1
+
+    if current_user.user_type == 'Polyclinic':
+        appointments = current_user.appos2
+
     if request.method == "POST":
         id = request.form['button-delete']
         Appointment.query.filter_by(appo_id=id).delete()
@@ -173,6 +180,7 @@ def search_patient():
 
     ).all()
     results = [p.to_dict() for p in patients]
+    print(patients)
     return jsonify({'query': results})
 
 

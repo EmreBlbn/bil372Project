@@ -3,22 +3,20 @@ from app import db
 
 class Appointment(db.Model):
     __tablename__ = 'appointment'
-    appo_no = db.Column(db.Integer, primary_key=True)
     on_date = db.Column(db.DateTime, nullable=False)
-    pati_tc = db.Column(db.String(11), nullable=False)
-    poly_name = db.Column(db.String(25), nullable=False)
+    patient_tc = db.Column(db.String(11), db.ForeignKey('patient.p_tc'), primary_key=True, nullable=False)
+    poly_name = db.Column(db.String(25), db.ForeignKey('polyclinic.pol_name'), nullable=False)
 
-    tc_pat = db.Column(db.Integer, db.ForeignKey('patient.p_tc'))
     appo_p = db.relationship(
         'Patient',
         back_populates='appos1',
-        foreign_keys=[tc_pat])
+        foreign_keys=[patient_tc],
+    )
 
-    name_poly = db.Column(db.Integer, db.ForeignKey('polyclinic.pol_name'))
     appo_poly = db.relationship(
         'Polyclinic',
         back_populates='appos2',
-        foreign_keys=[name_poly])
+        foreign_keys=[poly_name])
 
 
 class Treatment(db.Model):

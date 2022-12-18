@@ -73,10 +73,10 @@ CREATE TABLE TREATMENT
 CREATE TABLE APPOINTMENT
 (
     on_date date,
-	poly_name char(25) unique,
-	patient_tc char(11) unique,
+	poly_name char(25),
+	patient_tc char(11),
 	Foreign key(poly_name) REFERENCES POLYCLINIC (pol_name),
-	Foreign key(pati_tc) REFERENCES PATIENT (p_tc)
+	Foreign key(patient_tc) REFERENCES PATIENT (p_tc)
 );
 
 insert into APPUSER values (1,'poly1','polypoly1','polyclinic');

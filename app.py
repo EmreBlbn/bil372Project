@@ -5,8 +5,11 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_marshmallow import Marshmallow
 import config
+import logging
 
 app = Flask(__name__)
+app.debug = True
+logging.basicConfig(level=logging.DEBUG)
 
 POSTGRES_URL = config.CONFIG['postgresUrl']
 POSTGRES_USER = config.CONFIG['postgresUser']
