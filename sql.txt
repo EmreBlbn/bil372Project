@@ -76,7 +76,7 @@ CREATE TABLE APPOINTMENT
 	poly_name char(25) unique,
 	patient_tc char(11) unique,
 	Foreign key(poly_name) REFERENCES POLYCLINIC (pol_name),
-	Foreign key(pati_tc) REFERENCES PATIENT (p_tc)
+	Foreign key(patient_tc) REFERENCES PATIENT (p_tc)
 );
 
 insert into APPUSER values (1,'poly1','polypoly1','polyclinic');
