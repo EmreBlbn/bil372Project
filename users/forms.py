@@ -9,6 +9,11 @@ class LoginForm(FlaskForm):
     submit_button = SubmitField('Giris')
 
 
+class PatientForm(FlaskForm):
+    TC = StringField('TC Kimlik No:', validators=[DataRequired()])
+    submit_button = SubmitField('Giris')
+
+
 class AppForm(FlaskForm):
     name = StringField('Isim:')
     surname = StringField('Soy Isim:')

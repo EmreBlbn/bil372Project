@@ -1,11 +1,13 @@
 import psycopg2
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask_login import LoginManager, current_user
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_marshmallow import Marshmallow
 import config
 import logging
+
+from users.forms import PatientForm
 
 app = Flask(__name__)
 app.debug = True
@@ -50,19 +52,25 @@ def get_db_connection():
     return conn
 
 
-@app.route('/page1')
-def index():
+@app.route('/patient_info')
+def patient_info():
     conn = get_db_connection()
     cur = conn.cursor()
-    cur.execute('SELECT * FROM patient;')
-    deneme = conn.cursor()
-    deneme.execute('SELECT * FROM doctor;')
-    books = cur.fetchall()
-    books2 = deneme.fetchall()
-    cur.close()
-    deneme.close()
-    conn.close()
-    return render_template('index.html', books=books, books2=books2)
+    patient_form = PatientForm()
+    if request.method == 'GET':
+        return render_template('patient.html', patient_form=patient_form)
+
+    if request.method == 'POST':
+        if patient_form.validate_on_submit():
+            cur.execute('SELECT * FROM patient WHERE p_tc=$patient_form.TC;')
+            deneme = conn.cursor()
+            deneme.execute('SELECT * FROM doctor;')
+            books = cur.fetchall()
+            books2 = deneme.fetchall()
+            cur.close()
+            deneme.close()
+            conn.close()
+    return render_template('patient.html', books=books, books2=books2)
 
 
 
