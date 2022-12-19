@@ -61,8 +61,8 @@ CREATE TABLE LABORATORY
 
 CREATE TABLE TREATMENT
 (
-	d_tc char(11) unique,
-	pa_tc char(11) unique,
+	d_tc char(11),
+	pa_tc char(11),
 	diagnosis varchar(50),
 	treatment varchar(250),
 	Primary key(d_tc, pa_tc),

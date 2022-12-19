@@ -112,13 +112,13 @@ def register_new_treatment():
 
     if request.method == 'POST':
         if treatment_creation_form.validate_on_submit():
-            add_list = []
             new_treatment = Treatment(
-                patient_tckn=treatment_creation_form.patient_tckn.data,
+                pa_tc=treatment_creation_form.patient_tckn.data,
+                d_tc='12345678901',
                 diagnosis=treatment_creation_form.diagnosis.data,
                 treatment=treatment_creation_form.treatment.data,
             )
-            add_list.append(new_treatment)
+            db.session.add(new_treatment)
             db.session.commit()
             flash('Tedavi olusturuldu.')
 
@@ -174,7 +174,7 @@ def display_registers():
 
     if request.method == "POST":
         id = request.form['button-delete']
-        Appointment.query.filter_by(appo_id=id).delete()
+        Appointment.query.filter_by(patient_tc=id).delete()
         db.session.commit()
         appointments = Appointment.query.all()
         return render_template('display_registers.html', appointments=appointments)
@@ -203,11 +203,11 @@ def search_patient():
 @dashboard.route('/delete_appointment', methods=['GET'])
 @login_required
 def delete_appointment():
-    appo_id = request.args['button-delete']
-    temp_appo = Appointment.query.filter_by(appo_id=appo_id)
-    Appointment.query.filter_by(appo_id=appo_id).delete()
+    patient_tc = request.args['button-delete']
+    temp_appo = Appointment.query.filter_by(patient_tc=patient_tc)
+    Appointment.query.filter_by(patient_tc=patient_tc).delete()
     db.session.commit()
-    return jsonify({'msg': "{} silindi.".format(temp_appo.appo_id)})
+    return jsonify({'msg': "{} silindi.".format(temp_appo.patient_tc)})
 
 
 @dashboard.route('/profile', methods=['GET', 'POST'])
