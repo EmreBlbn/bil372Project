@@ -1,4 +1,12 @@
 {% extends "layout.html" %}
+<script>
+    window.onload = function() { countRegisters() };
+    function countRegisters() {
+
+        document.getElementById("numberZone2").innerHTML = "deneme";
+    }
+
+</script>
 {% block page_content %}
     <p style="font-size:1.2em">Randevulariniz: </p>
     {% for appo in appointments %}
@@ -7,6 +15,11 @@
                         justify-content: flex-start;">
                 <img src="{{ url_for('static', filename='images/iconbl.png') }}" class="data_appoicon">
                 <br><br>
+                <p class="page_data_text">
+                    TCKN: <b>{{ appo.patient_tc}}</b> <br>
+                    Randevu Gun: <b>{{ appo.on_date }}</b> <br>
+                    Poliklinik: <b>{{ appo.poly_name }}</b> <br>
+                </p>
 {#                <p class="page_data_text">#}
 {#                    You have an appointment on <b>{{ appo1.on }}</b><br>#}
 {#                    Appointment type is <b>{{ appo.appo_type }}</b>#}
@@ -28,4 +41,5 @@
         </div>
 
     {% endfor %}
+    <div id="numberZone2"></div>
 {% endblock %}

@@ -171,17 +171,14 @@ def display_registers():
 
     if current_user.user_type == 'Polyclinic':
         appointments = current_user.appos2
-
+    print(get_debug_queries())
     if request.method == "POST":
         id = request.form['button-delete']
         Appointment.query.filter_by(patient_tc=id).delete()
         db.session.commit()
         appointments = Appointment.query.all()
         return render_template('display_registers.html', appointments=appointments)
-
     return render_template('display_registers.html', appointments=appointments)
-
-
 
 
 @dashboard.route('/search_patient', methods=['POST'])

@@ -49,7 +49,6 @@
         $('#search_box').keyup(function (key) {
             var key_value=key.which;
             if(key_value != ""){
-                console.log("ROHAT")
                 $.ajax({
                         url: "/search_patient",
                         data: {text:$('#search_box').val()},
